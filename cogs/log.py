@@ -43,6 +43,8 @@ class Log(commands.Cog):
   async def on_message_edit(self, before, after):
     if before.content == after.content:
         return
+    if before.author.id == 250717919221252117: # ignore oink because bombing spams the log.
+      return
 
     # TODO: ignore oink bot.
     print(f"{Fore.CYAN}[{before.guild}] [#{before.channel}] A message from {Fore.RESET}{before.author}{Fore.CYAN} was edited:")
