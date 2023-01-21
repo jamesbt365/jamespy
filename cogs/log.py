@@ -2,6 +2,8 @@ import asyncio
 import discord
 from discord.ext import commands
 
+import re
+
 import colorama
 from colorama import init, Fore, Style
 
@@ -25,15 +27,13 @@ class Log(commands.Cog):
 
   @commands.Cog.listener()
   async def on_message(self, message):
-    message_words = message.content.lower().split(" ")
-    bad_words = set(badlist).intersection(message_words)
-    fixed_words = set(fixlist).intersection(bad_words)
-    if bad_words - fixed_words:
-        print(f"Flagged for bad word(s): {Style.BRIGHT}{Fore.RED}{bad_words - fixed_words}")
+    messagewords = message.content.lower().split(" ")
+    blacklisted_words = [word for word in messagewords if any(j in word and word not in fixlist for j in badlist)]
+    if blacklisted_words:
+        print(f"Flagged for bad word(s): {Style.BRIGHT}{Fore.RED}" + ", ".join(blacklisted_words))
         print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {Style.BRIGHT}{Fore.RED}{message.content}")
     else:
         print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {message.content}")
-            
 
   @commands.Cog.listener()
   async def on_message_delete(self, message):
