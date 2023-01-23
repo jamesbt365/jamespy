@@ -5,3 +5,8 @@ minute
 minutes
 pass
 hololive
+title
+therapist
+identity
+peanut
+peanuts
