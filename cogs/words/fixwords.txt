@@ -10,3 +10,4 @@ therapist
 identity
 peanut
 peanuts
+analog

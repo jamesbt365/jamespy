@@ -1,7 +1,7 @@
 import asyncio
 import discord
 from discord.ext import commands
-
+from discord import Embed
 import re
 
 import colorama
@@ -18,6 +18,11 @@ fixlist = []
 with open("./cogs/words/fixwords.txt") as f:
     for line in f:
         fixlist.append(line.strip())
+
+cameralist = []
+with open("./cogs/words/cameras.txt") as f:
+    for line in f:
+        cameralist.append(line.strip())
 class Log(commands.Cog):
 
   def __init__(self, bot):
@@ -34,6 +39,10 @@ class Log(commands.Cog):
         print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {Style.BRIGHT}{Fore.RED}{message.content}")
     else:
         print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {message.content}")
+    if message.author.id != self.bot.user.id:
+      if any(word in message.content.lower() for word in cameralist):
+        embed = Embed(title=f"Server: {message.guild}", description=f"A message sent in **#{message.channel.name}** by **{message.author}**: {message.content}", color=0x00ff00)
+        await self.bot.get_user(326444255361105920).send(embed=embed)
 
   @commands.Cog.listener()
   async def on_message_delete(self, message):
