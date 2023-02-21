@@ -23,3 +23,4 @@ parse
 parser
 scum
 scummy
+competitive

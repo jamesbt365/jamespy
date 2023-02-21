@@ -17,9 +17,9 @@ def read_words_from_file(file_path):
     return words
 
 
-badlist = read_words_from_file("./cogs/words/badwords.txt")
-fixlist = read_words_from_file("./cogs/words/fixwords.txt")
-cameralist = read_words_from_file("./cogs/words/cameras.txt")
+badlist = read_words_from_file("./cogs/lists/badwords.txt")
+fixlist = read_words_from_file("./cogs/lists/fixwords.txt")
+cameralist = read_words_from_file("./cogs/lists/cameras.txt")
 
 
 class Log(commands.Cog):

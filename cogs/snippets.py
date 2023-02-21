@@ -38,7 +38,12 @@ class Snippet(commands.Cog):
             'description': ' '.join(description).replace('\\n', '\n')
         }
         self.save_snippets(ctx.guild.id)
-        await ctx.send(f'Set the `{name}` snippet correctly!')
+
+        embed = discord.Embed(
+            title=title,
+            description=''.join(description),
+        )
+        await ctx.send(f'Set the `{name}` snippet correctly!', embed=embed)
 
     @commands.command(name='snippet')
     async def snippet(self, ctx, name: str):
@@ -52,21 +57,39 @@ class Snippet(commands.Cog):
             title=snippet['title'],
             description=snippet['description'],
         )
+        
+        #embed.set_image(url='https://cdn.discordapp.com/avatars/326444255361105920/4c0ce3b291650d44802fc9198a16c6d2.png?size=1024')
         await ctx.send(embed=embed)
 
-    @commands.command(name='remove-snippet')
+    @commands.command(name='remove-snippet', aliases=["removesnippet", "delete-snippet", "deletesnippet"])
     @commands.has_permissions(manage_messages=True)
     async def remove_snippet(self, ctx, name: str):
         guild_id = str(ctx.guild.id)
         snippets = self.get_snippets(guild_id)
-        try:
-            del snippets[name]
-        except KeyError:
-            return await ctx.send(f'No snippet found with the name "{name}"')
+        if name not in snippets:
+            return await ctx.send(f'No snippet found with the name `{name}`')
 
-        self.save_snippets(guild_id, snippets)
+        del snippets[name]
+        self.guild_to_snippets[guild_id] = snippets
+        self.save_snippets(guild_id)
         await ctx.send(f'Snippet `{name}` removed successfully!')
 
+    @commands.command(name='list-snippets', aliases=["list-snippet", "snippet-list", "snippets-list"])
+    async def list_snippets(self, ctx):
+        snippets = self.get_snippets(ctx.guild.id)
+        if not snippets:
+            return await ctx.send('This server currently doesn\'t have any snippets.')
+
+        snippet_list = '\n'.join(f"`{name}`" for name in snippets)
+
+        # Create the embed with the list of snippets in the description field
+        embed = discord.Embed(
+            title='Snippets',
+            description=snippet_list,
+            color=discord.Color.blue()
+        )
+
+        await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Snippet(bot))
