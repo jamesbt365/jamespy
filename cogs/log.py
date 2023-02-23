@@ -30,6 +30,11 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.author.id == 432610292342587392:
+            return
+        if message.content.startswith("$") and message.channel.id == 850342078034870302:
+            return
+            
         messagewords = message.content.lower().split(" ")
         blacklisted_words = [word for word in messagewords if any(j in word and word not in fixlist for j in badlist)]
         if blacklisted_words:
@@ -39,7 +44,7 @@ class Log(commands.Cog):
             print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {message.content}")
 
         if message.author.id != self.bot.user.id:
-            if any(word in message.content.lower() for word in cameralist):
+            if any(f" {word} " in f" {message.content.lower()} " for word in cameralist):
                 embed = Embed(
                     title=f"Server: {message.guild}",
                     description=f"A message sent in **#{message.channel.name}** by **{message.author}**: {message.content}",
