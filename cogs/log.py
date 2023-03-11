@@ -30,11 +30,12 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        # This following segment ignores mudae and mudae commands in the mudae channel of discord.gg/osu
         if message.author.id == 432610292342587392:
             return
         if message.content.startswith("$") and message.channel.id == 850342078034870302:
             return
-            
+
         messagewords = message.content.lower().split(" ")
         blacklisted_words = [word for word in messagewords if any(j in word and word not in fixlist for j in badlist)]
         if blacklisted_words:
