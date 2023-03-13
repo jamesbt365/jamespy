@@ -2,6 +2,6 @@ __pycache__/
 *.py[cod]
 bin/
 build/
-config/
+data/
 pip-log.txt
 pip-delete-this-directory.txt

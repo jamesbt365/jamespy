@@ -16,7 +16,7 @@ class Snippet(commands.Cog):
         if guild_id not in self.snippets:
             self.snippets[guild_id] = {}
             try:
-                with open(f'config/snippet_storage/{guild_id}_snippets.json', 'r') as f:
+                with open(f'data/snippet_storage/{guild_id}_snippets.json', 'r') as f:
                     self.snippets[guild_id] = json.load(f)
             except json.JSONDecodeError:
                 self.snippets[guild_id] = {}
@@ -25,7 +25,7 @@ class Snippet(commands.Cog):
         return self.snippets[guild_id]
 
     def save_guild_snippets(self, guild_id):
-        with open(f'config/snippet_storage/{guild_id}_snippets.json', 'w') as f:
+        with open(f'data/snippet_storage/{guild_id}_snippets.json', 'w') as f:
             json.dump(self.snippets[guild_id], f, indent=4)
 
     @commands.command(name='set-snippet')
