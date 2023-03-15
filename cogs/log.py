@@ -19,7 +19,6 @@ def read_words_from_file(file_path):
 
 badlist = read_words_from_file("./cogs/lists/badwords.txt")
 fixlist = read_words_from_file("./cogs/lists/fixwords.txt")
-cameralist = read_words_from_file("./cogs/lists/cameras.txt")
 
 
 class Log(commands.Cog):
@@ -43,14 +42,6 @@ class Log(commands.Cog):
             print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {Style.BRIGHT}{Fore.RED}{message.content}")
         else:
             print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {message.content}")
-
-        if message.author.id != self.bot.user.id:
-            if any(f" {word} " in f" {message.content.lower()} " for word in cameralist):
-                embed = Embed(
-                    title=f"Server: {message.guild}",
-                    description=f"A message sent in **#{message.channel.name}** by **{message.author}**: {message.content}",
-                    color=0x00FF00)
-                await self.bot.get_user(326444255361105920).send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
