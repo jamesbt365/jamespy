@@ -19,12 +19,6 @@ class db_management(commands.Cog):
             return True
         return False
 
-    async def is_special_user(ctx):
-        special_user_id = 158567567487795200
-        if ctx.author.id == special_user_id:
-            return True
-        return False
-
     @commands.command()
     @commands.guild_only()
     @commands.check(is_authorised_or_special_user)
@@ -57,7 +51,7 @@ class db_management(commands.Cog):
 
         elif len(args) == 2 and args[0] == '-g':
             id = args[1]
-            if not await self.is_special_user(ctx):
+            if ctx.author.id != 158567567487795200:
                 return await ctx.send('You are not authorised to check messages globally.')
 
             self.cursor.execute("SELECT user_id, channel_id, content, timestamp, guild_id FROM msgs WHERE message_id = ?", (id,))
@@ -90,7 +84,7 @@ class db_management(commands.Cog):
 
 
     @commands.command()
-    @commands.check(is_special_user)
+    @commands.is_owner()
     async def dbstats(self, ctx):
         db_size = os.path.getsize("data/databases/messages.db") / (1024 * 1024)
         self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
