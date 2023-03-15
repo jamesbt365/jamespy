@@ -86,7 +86,7 @@ class db_management(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def dbstats(self, ctx):
-        db_size = os.path.getsize("data/databases/messages.db") / (1024 * 1024)
+        db_size = os.path.getsize("data/databases/data.db") / (1024 * 1024)
         self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = self.cursor.fetchall()
 
