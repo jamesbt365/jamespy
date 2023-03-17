@@ -27,6 +27,8 @@ class Log(commands.Cog):
 
     # TODO: log most other events.
 
+    ############################### MESSAGES ###############################
+
     @commands.Cog.listener()
     async def on_message(self, message):
         # This following segment ignores mudae and mudae commands in the mudae channel of discord.gg/osu
@@ -59,6 +61,55 @@ class Log(commands.Cog):
         print(f"{Fore.CYAN}[{before.guild}] [#{before.channel}] A message from {Fore.RESET}{before.author}{Fore.CYAN} was edited:")
         print(f"{Fore.CYAN}BEFORE: {before.author}: {before.content}")
         print(f"{Fore.CYAN}AFTER:  {after.author}: {after.content}")
+
+    ############################### REACTIONS ###############################
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name} added a reaction: {reaction.emoji}")
+
+    @commands.Cog.listener()
+    async def on_reaction_remove(self, reaction, user):
+        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name} removed a reaction: {reaction.emoji}")
+
+    @commands.Cog.listener()
+    async def on_reaction_clear_emoji(self, reaction):
+         print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] The {reaction.emoji} was cleared from {reaction.message}")
+
+    @commands.Cog.listener()
+    async def on_reaction_clear(self, message, reactions):
+        print(f"{Fore.MAGENTA}[{message.guild}] [#{message.channel}] All reactions were cleared from message \"{message.author}: {message.content}\"")
+
+    ############################### MEMBERS ###############################
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has joined!")
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has left!")
+
+
+    ############################### CHANNELS ###############################
+
+    @commands.Cog.listener()
+    async def on_guild_channel_create(self, channel):
+        print(f"{Fore.BLUE}[{channel.guild}] #{channel.name} was created!")
+
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel):
+        print(f"{Fore.BLUE}[{channel.guild}] #{channel.name} was deleted!")
+
+    ############################### THREADS ###############################
+
+    @commands.Cog.listener()
+    async def on_thread_create(self, thread):
+        print(f"{Fore.LIGHTBLUE_EX}[{thread.guild}] #{thread.name} was created in #{thread.parent}!")
+
+    @commands.Cog.listener()
+    async def on_thread_remove(self, thread):
+        print(f"{Fore.LIGHTBLUE_EX}[{thread.guild}] #{thread.name} was deleted from #{thread.parent}!")
 
 
 async def setup(bot):
