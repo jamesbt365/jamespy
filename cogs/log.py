@@ -1,8 +1,9 @@
 import asyncio
 import discord
+import re
+import unicodedata
 from discord.ext import commands
 from discord import Embed
-
 import colorama
 from colorama import init, Fore, Style
 
@@ -20,12 +21,14 @@ def read_words_from_file(file_path):
 badlist = read_words_from_file("./cogs/lists/badwords.txt")
 fixlist = read_words_from_file("./cogs/lists/fixwords.txt")
 
+patterns = [
+re.compile(r"\b\w*j\s*\d*\W*?a+\W*\d*\W*?m+\W*\d*\W*?e+\W*\d*\W*?s+\W*\d*\W*?\w*\b", re.IGNORECASE | re.UNICODE),
+re.compile(r"\b\w*b\s*\d*\W*?t+\W*\d*\W*?3+\W*\d*\W*?6+\W*\d*\W*?5+\W*\d*\W*?\w*\b", re.IGNORECASE | re.UNICODE),
+]
 
 class Log(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    # TODO: log most other events.
 
     ############################### MESSAGES ###############################
 
@@ -36,6 +39,16 @@ class Log(commands.Cog):
             return
         if message.content.startswith("$") and message.channel.id == 850342078034870302:
             return
+        for pattern in patterns:
+            if not message.guild or message.author.id == 158567567487795200:
+                break  # skip messages from the specified user or DM channels
+            if re.search(pattern, unicodedata.normalize('NFKD', message.content)):
+                embed = Embed(
+                    title=f"A pattern was matched!",
+                    description=f"**{message.channel.mention}** by **{message.author}**: {message.content} \n\n [Jump to message!]({message.jump_url})",
+                    color=0x00FF00)
+                await self.bot.get_user(158567567487795200).send(f"In {message.guild.name} {message.channel.mention} you were mentioned by {message.author} (ID:{message.author.id})", embed=embed)
+                break
 
         messagewords = message.content.lower().split(" ")
         blacklisted_words = [word for word in messagewords if any(j in word and word not in fixlist for j in badlist)]
@@ -66,6 +79,8 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
+        if user.bot:
+            return
         print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name} added a reaction: {reaction.emoji}")
 
     @commands.Cog.listener()
@@ -87,7 +102,7 @@ class Log(commands.Cog):
         print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has joined!")
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_remove(self, member):
         print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has left!")
 
 
