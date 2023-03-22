@@ -82,11 +82,11 @@ class Log(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if user.bot:
             return
-        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name} added a reaction: {reaction.emoji}")
+        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name}#{user.discriminator} added a reaction: {reaction.emoji}")
 
     @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
-        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name} removed a reaction: {reaction.emoji}")
+        print(f"{Fore.MAGENTA}[{reaction.message.guild}] [#{reaction.message.channel}] {user.name}#{user.discriminator} removed a reaction: {reaction.emoji}")
 
     @commands.Cog.listener()
     async def on_reaction_clear_emoji(self, reaction):
@@ -100,11 +100,11 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has joined!")
+        print(f"{Fore.YELLOW}[{member.guild}] {member.name}#{member.discriminator} (ID:{member.id}) has joined!")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        print(f"{Fore.YELLOW}[{member.guild}] {member.name} (ID:{member.id}) has left!")
+        print(f"{Fore.YELLOW}[{member.guild}] {member.name}#{member.discriminator} (ID:{member.id}) has left!")
 
 
     ############################### CHANNELS ###############################
@@ -134,11 +134,11 @@ class Log(commands.Cog):
         if before.channel != after.channel:
             if after.channel is not None:
                 if before.channel is not None and after.channel.guild == before.channel.guild:
-                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name} switched from #{before.channel} to #{after.channel}")
+                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name}#{member.discriminator} switched from #{before.channel} to #{after.channel}")
                 else:
-                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name} joined #{after.channel}")
+                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name}#{member.discriminator} joined #{after.channel}")
             else:
-                print(f"{Fore.GREEN}[{before.channel.guild}]: {member.name} left #{before.channel}")
+                print(f"{Fore.GREEN}[{before.channel.guild}]: {member.name}#{member.discriminator} left #{before.channel}")
 
 async def setup(bot):
     await bot.add_cog(Log(bot))
