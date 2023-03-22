@@ -14,6 +14,7 @@ async def load_extensions():
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you inside your home."))
 
 
 async def main():

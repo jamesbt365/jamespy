@@ -26,6 +26,7 @@ re.compile(r"\b\w*j\s*\d*\W*?a+\W*\d*\W*?m+\W*\d*\W*?e+\W*\d*\W*?s+\W*\d*\W*?\w*
 re.compile(r"\b\w*b\s*\d*\W*?t+\W*\d*\W*?3+\W*\d*\W*?6+\W*\d*\W*?5+\W*\d*\W*?\w*\b", re.IGNORECASE | re.UNICODE),
 ]
 
+
 class Log(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -41,7 +42,7 @@ class Log(commands.Cog):
             return
         for pattern in patterns:
             if not message.guild or message.author.id == 158567567487795200:
-                break  # skip messages from the specified user or DM channels
+                break  # skip messages from the specified user or DMs.
             if re.search(pattern, unicodedata.normalize('NFKD', message.content)):
                 embed = Embed(
                     title=f"A pattern was matched!",
@@ -126,6 +127,18 @@ class Log(commands.Cog):
     async def on_thread_remove(self, thread):
         print(f"{Fore.LIGHTBLUE_EX}[{thread.guild}] #{thread.name} was deleted from #{thread.parent}!")
 
+    ############################### VOICE ###############################
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if before.channel != after.channel:
+            if after.channel is not None:
+                if before.channel is not None and after.channel.guild == before.channel.guild:
+                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name} switched from #{before.channel} to #{after.channel}")
+                else:
+                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name} joined #{after.channel}")
+            else:
+                print(f"{Fore.GREEN}[{before.channel.guild}]: {member.name} left #{before.channel}")
 
 async def setup(bot):
     await bot.add_cog(Log(bot))
