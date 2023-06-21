@@ -1,4 +1,3 @@
-import asyncio
 import discord
 from discord.ext import commands
 import sqlite3
@@ -15,6 +14,8 @@ class database(commands.Cog):
         self.cursor.execute('CREATE TABLE IF NOT EXISTS msg_edits (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NULL, channel_id INTEGER, message_id INTEGER, user_id INTEGER, old_content TEXT, new_content TEXT, timestamp TEXT)')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS msg_deletions (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NULL, channel_id INTEGER, message_id INTEGER, user_id INTEGER, content TEXT, timestamp TEXT)')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS join_tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NULL, author_id INTEGER, user_id INTEGER, timestamp TEXT)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS warns (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id INTEGER, channel_id TEXT NULL, user_id INTEGER, moderator_id INTEGER, reason TEXT, weight INTEGER, timestamp TEXT)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS xp (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id INTEGER, user_id INTEGER, xp INTEGER)')
         self.connection.commit()
 
     @commands.Cog.listener()
