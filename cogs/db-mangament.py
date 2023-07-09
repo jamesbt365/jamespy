@@ -1,7 +1,5 @@
-import asyncio
 import discord
 from discord.ext import commands
-import sqlite3
 import datetime
 import os
 
@@ -94,7 +92,7 @@ class db_management(commands.Cog):
         embed.add_field(name="Number of Tables", value=len(tables)-1, inline=False)
 
         for table in tables:
-            if table[0] != 'sqlite_sequence':  # exclude the sqlite_sequence table
+            if table[0] != 'sqlite_sequence':
                 self.cursor.execute(f"SELECT COUNT(*) FROM {table[0]};")
                 count = self.cursor.fetchone()[0]
                 embed.add_field(name=f"{table[0]}", value=f"{count} entries", inline=False)

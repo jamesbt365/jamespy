@@ -35,8 +35,8 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        # This following segment ignores mudae and mudae commands in the mudae channel of discord.gg/osu
-        if message.author.id == 432610292342587392:
+        # This following segment ignores mudae, rinbot and mudae commands in the mudae channel of discord.gg/osu
+        if message.author.id == 432610292342587392 or message.author.id == 429656936435286016:
             return
         if message.content.startswith("$") and message.channel.id == 850342078034870302:
             return
@@ -54,10 +54,12 @@ class Log(commands.Cog):
         messagewords = message.content.lower().split(" ")
         blacklisted_words = [word for word in messagewords if any(j in word and word not in fixlist for j in badlist)]
         if blacklisted_words:
-            print(f"Flagged for bad word(s): {Style.BRIGHT}{Fore.RED}" + ", ".join(blacklisted_words))
-            print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {Style.BRIGHT}{Fore.RED}{message.content}")
+            print(f"Flagged for bad word(s): {Style.BRIGHT}{Fore.RED}" + ", ".join(blacklisted_words) + f"{Style.RESET_ALL}")
+            print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {Style.BRIGHT}{Fore.RED}{message.content}{Style.RESET_ALL}")
         else:
             print(f"{Fore.LIGHTBLACK_EX}[{message.guild}] [#{message.channel}]{Fore.RESET} {message.author}: {message.content}")
+
+
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -69,7 +71,7 @@ class Log(commands.Cog):
     async def on_message_edit(self, before, after):
         if before.content == after.content:
           return
-        if (before.author.id == 250717919221252117):  # ignore oink because bombing spams the log.
+        if (before.author.id == 250717919221252117 or before.author.id == 432610292342587392): # Ignores oink and mudae because they spam the terminal
           return
 
         print(f"{Fore.CYAN}[{before.guild}] [#{before.channel}] A message from {Fore.RESET}{before.author}{Fore.CYAN} was edited:")
@@ -106,6 +108,18 @@ class Log(commands.Cog):
     async def on_member_remove(self, member):
         print(f"{Fore.YELLOW}[{member.guild}] {member.name}#{member.discriminator} (ID:{member.id}) has left!")
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if before.nick != after.nick:
+            print(f"{Fore.LIGHTGREEN_EX}[{before.guild}] Nickname change: {before.name}#{before.discriminator}: {before.nick} -> {after.nick} (ID:{before.id})")
+
+    @commands.Cog.listener()
+    async def on_user_update(self, before, after):
+        if before.name != after.name or before.discriminator != after.discriminator:
+            print(f"{Fore.LIGHTGREEN_EX}Username change: {before.name}#{before.discriminator} -> {after.name}#{after.discriminator} (ID:{before.id})")
+        if before.global_name != after.global_name:
+            print(f"{Fore.LIGHTGREEN_EX}Display name change: {before.global_name} -> {after.global_name} (ID:{before.id})")
+
 
     ############################### CHANNELS ###############################
 
@@ -124,7 +138,7 @@ class Log(commands.Cog):
         print(f"{Fore.LIGHTBLUE_EX}[{thread.guild}] #{thread.name} was created in #{thread.parent}!")
 
     @commands.Cog.listener()
-    async def on_thread_remove(self, thread):
+    async def on_thread_delete(self, thread):
         print(f"{Fore.LIGHTBLUE_EX}[{thread.guild}] #{thread.name} was deleted from #{thread.parent}!")
 
     ############################### VOICE ###############################
@@ -134,11 +148,11 @@ class Log(commands.Cog):
         if before.channel != after.channel:
             if after.channel is not None:
                 if before.channel is not None and after.channel.guild == before.channel.guild:
-                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name}#{member.discriminator} switched from #{before.channel} to #{after.channel}")
+                    print(f"{Fore.GREEN}[{after.channel.guild}] {member.name}#{member.discriminator} switched from #{before.channel} (ID:{before.channel.id}) to #{after.channel} (ID:{after.channel.id})")
                 else:
-                    print(f"{Fore.GREEN}[{after.channel.guild}]: {member.name}#{member.discriminator} joined #{after.channel}")
+                    print(f"{Fore.GREEN}[{after.channel.guild}] {member.name}#{member.discriminator} joined #{after.channel} (ID:{after.channel.id})")
             else:
-                print(f"{Fore.GREEN}[{before.channel.guild}]: {member.name}#{member.discriminator} left #{before.channel}")
+                print(f"{Fore.GREEN}[{before.channel.guild}] {member.name}#{member.discriminator} left #{before.channel} (ID:{before.channel.id})")
 
 async def setup(bot):
     await bot.add_cog(Log(bot))

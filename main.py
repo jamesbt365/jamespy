@@ -2,6 +2,7 @@ import asyncio
 import discord
 from discord.ext import commands
 import os
+import logging
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="-", intents=intents)

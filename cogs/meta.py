@@ -1,14 +1,10 @@
-import asyncio
-import discord
 from discord.ext import commands
-from discord import Embed
-
 
 class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["github", "jamespy"])
+    @commands.command(aliases=["github", "jamespy", "proof"])
     async def source(self, ctx):
         await ctx.send("<https://github.com/jamesbt365/jamespy>")
 
