@@ -81,7 +81,7 @@ class db_management(commands.Cog):
             await ctx.send('Invalid command usage.')
 
 
-    @commands.command()
+    @commands.command(aliases=["db-stats", "dbinfo", "db-info"])
     @commands.is_owner()
     async def dbstats(self, ctx):
         db_size = os.path.getsize("data/databases/data.db") / (1024 * 1024)
@@ -89,13 +89,12 @@ class db_management(commands.Cog):
         tables = self.cursor.fetchall()
 
         embed = discord.Embed(title="Database Stats", color=discord.Color.green())
-        embed.add_field(name="Number of Tables", value=len(tables)-1, inline=False)
+        embed.add_field(name="Number of Tables", value=len(tables), inline=False)
 
         for table in tables:
-            if table[0] != 'sqlite_sequence':
-                self.cursor.execute(f"SELECT COUNT(*) FROM {table[0]};")
-                count = self.cursor.fetchone()[0]
-                embed.add_field(name=f"{table[0]}", value=f"{count} entries", inline=False)
+            self.cursor.execute(f"SELECT COUNT(*) FROM {table[0]};")
+            count = self.cursor.fetchone()[0]
+            embed.add_field(name=f"{table[0]}", value=f"{count} entries", inline=False)
         embed.set_footer(text=f"Database size: {db_size:.2f} MB")
         await ctx.send(embed=embed)
 
