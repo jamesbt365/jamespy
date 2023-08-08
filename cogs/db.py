@@ -14,7 +14,7 @@ class database(commands.Cog):
         self.cursor.execute('CREATE TABLE IF NOT EXISTS msgs (guild_id INTEGER NULL, channel_id INTEGER, message_id INTEGER, user_id INTEGER, content TEXT, timestamp TEXT)')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS msg_edits (guild_id INTEGER NULL, channel_id INTEGER, message_id INTEGER, user_id INTEGER, old_content TEXT, new_content TEXT, timestamp TEXT)')
         self.cursor.execute('CREATE TABLE IF NOT EXISTS msg_deletions (guild_id INTEGER NULL, channel_id INTEGER, message_id INTEGER, user_id INTEGER, content TEXT, timestamp TEXT)')
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS join_tracks ( guild_id INTEGER NULL, author_id INTEGER, user_id INTEGER, timestamp TEXT)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS join_tracks (guild_id INTEGER NULL, author_id INTEGER, user_id INTEGER, timestamp TEXT)')
         self.connection.commit()
 
     @commands.Cog.listener()
