@@ -6,13 +6,9 @@ class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["github", "jamespy", "proof"])
-    async def source(self, ctx):
-        await ctx.send("<https://github.com/jamesbt365/jamespy>")
-
-    @commands.command(name='shutdown', hidden=True)
+    @commands.command(name='shutdown-front', hidden=True)
     @commands.is_owner()
-    async def shutdown(self, ctx):
+    async def shutdown_front(self, ctx):
         await ctx.send('Bot is shutting down...')
         await ctx.bot.close()
 
@@ -84,7 +80,7 @@ class Meta(commands.Cog):
                 response = f"Total count of users with the '{role_name}' role: {total_count}\n"
                 response += f"{'User IDs' if onlyid else 'Users'} with the '{role_name}' role:\n{user_list}"
                 await ctx.send(response)
-       
+
 
 
 async def setup(bot):
